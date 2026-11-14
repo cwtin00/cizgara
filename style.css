@@ -1,0 +1,84 @@
+:root{--accent:#C46A3C}
+body{margin:0;background:#0F0F0E}
+*{box-sizing:border-box}
+a{color:#E9E3D6;text-decoration:none}a:hover{color:#FFFFFF}
+::selection{background:var(--accent);color:#0F0F0E}
+.serif{font-family:'Bodoni Moda',serif}
+.mono{font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.18em}
+
+/* nav underline */
+.nl{position:relative;padding:6px 0}
+.nl::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .6s cubic-bezier(.7,0,.2,1)}
+.nl:hover::after{transform:scaleX(1);transform-origin:left}
+
+/* buttons: fill slides up */
+.btn{position:relative;overflow:hidden;isolation:isolate;transition:color .5s cubic-bezier(.7,0,.2,1)}
+.btn::before{content:"";position:absolute;inset:0;background:var(--accent);transform:translateY(101%);transition:transform .5s cubic-bezier(.7,0,.2,1);z-index:-1}
+.btn:hover{color:#0F0F0E}
+.btn:hover::before{transform:translateY(0)}
+.btn-solid{background:var(--accent);color:#0F0F0E}
+.btn-solid::before{background:#E9E3D6}
+
+/* hero line reveal */
+.line{display:block;overflow:hidden;padding-bottom:.06em}
+.line > span{display:block;transform:translateY(105%);animation:rise 1.4s cubic-bezier(.16,1,.3,1) forwards}
+.d1 > span{animation-delay:.15s}.d2 > span{animation-delay:.3s}.d3 > span{animation-delay:.45s}
+@keyframes rise{to{transform:translateY(0)}}
+.fade{opacity:0;animation:fadeIn 1.4s ease .9s forwards}
+@keyframes fadeIn{to{opacity:1}}
+.rule{transform:scaleX(0);transform-origin:left;animation:grow 1.6s cubic-bezier(.7,0,.2,1) .2s forwards}
+@keyframes grow{to{transform:scaleX(1)}}
+
+/* rotating badge */
+.spin{animation:spin 26s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.badge:hover .spin{animation-duration:8s}
+
+/* marquee */
+.mq{display:flex;width:max-content;animation:mq 48s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* photo placeholder breathing */
+.ph{position:relative;overflow:hidden}
+.ph::before{content:"";position:absolute;inset:-20%;background:repeating-linear-gradient(115deg,rgba(233,227,214,.035) 0 1px,transparent 1px 22px);animation:drift 30s linear infinite}
+@keyframes drift{to{transform:translateX(22px)}}
+
+/* menu rows */
+.row{transition:padding .5s cubic-bezier(.16,1,.3,1),color .4s}
+.row:hover{padding-left:18px;color:#FFFFFF}
+.row:hover .num{color:var(--accent)}
+.tab[aria-pressed="true"]{color:#E9E3D6;border-color:var(--accent)}
+.pill[aria-pressed="true"]{background:#E9E3D6;color:#0F0F0E;border-color:#E9E3D6}
+.pill:hover{border-color:#E9E3D6}
+.field{background:transparent;border:0;border-bottom:1px solid #3A3833;color:#E9E3D6;font:inherit;font-size:17px;padding:12px 0;width:100%;outline:none;transition:border-color .4s;border-radius:0}
+.field:focus{border-color:var(--accent)}
+.field::placeholder{color:#6F6A61}
+select.field option{background:#0F0F0E}
+.tile{transition:background .6s}
+.tile:hover{background:#171715}
+
+/* scroll-driven reveals, progressive */
+@supports (animation-timeline: view()){
+  .rv{animation:up linear both;animation-timeline:view();animation-range:entry 0% cover 28%}
+  @keyframes up{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:none}}
+  .fill{background:linear-gradient(90deg,#E9E3D6 50%,#4A4741 50%);background-size:200% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent;animation:fillx linear both;animation-timeline:view();animation-range:entry 30% cover 60%}
+  @keyframes fillx{to{background-position:0 0}}
+  .par{animation:par linear both;animation-timeline:view()}
+  @keyframes par{from{transform:translateY(60px)}to{transform:translateY(-60px)}}
+}
+
+/* responsive */
+@media (max-width: 860px){
+  .navlinks{display:none !important}
+  .hide-sm{display:none !important}
+  .stack{grid-template-columns:1fr !important}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .line > span{transform:none}.fade{opacity:1}.rule{transform:none}
+}
+
+/* fallback reveal for browsers without scroll-driven animations */
+.no-sdt .rv{opacity:0;transform:translateY(48px);transition:opacity 1.1s cubic-bezier(.16,1,.3,1),transform 1.1s cubic-bezier(.16,1,.3,1)}
+.no-sdt .rv.in{opacity:1;transform:none}
+[hidden]{display:none !important}
